@@ -1,0 +1,14 @@
+{
+  "name": "sls-demo",
+  "description": "",
+  "version": "0.1.0",
+  "author": "Roman Munteanu",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.61",
+    "serverless": "^3.33.0",
+    "serverless-offline": "^6.5.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.9.7"
+  }
+}

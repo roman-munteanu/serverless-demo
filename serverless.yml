@@ -1,0 +1,21 @@
+service: sls-demo
+frameworkVersion: "3"
+
+plugins:
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: eu-central-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /
+          method: get
+
