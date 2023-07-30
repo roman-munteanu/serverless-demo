@@ -12,6 +12,8 @@ npm install uuid
 npm install aws-sdk
 
 npm install @aws-sdk/types
+
+npm install http-errors
 ```
 
 Deploy:

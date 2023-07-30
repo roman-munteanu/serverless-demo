@@ -23,18 +23,24 @@ resources:
     SongsTable: ${file(./resources/SongsTable.yml):SongsTable}
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: /
-          method: get
   createSong:
-    handler: src/handlers.createHandler
+    handler: src/handlers/createSong.handler
     events:
       - httpApi:
           path: /songs
           method: post
+  findSongs:
+    handler: src/handlers/findSongs.handler
+    events:
+      - httpApi:
+          path: /songs
+          method: get
+  getSong:
+    handler: src/handlers/getSong.handler
+    events:
+      - httpApi:
+          path: /songs/{id}
+          method: get
 
 custom:
   SongsTable:

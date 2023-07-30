@@ -1,17 +1,22 @@
 import {Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {v4 as uuid} from 'uuid';
 import {DynamoDB} from 'aws-sdk';
+import createError from 'http-errors';
+import {Song} from '../model/songs'
 
 const dynamoDB = new DynamoDB.DocumentClient();
 
-export const createHandler: Handler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
+export const handler: Handler = async (event: APIGatewayProxyEvent): 
+    Promise<APIGatewayProxyResult> => {
 
     const {artist, title} = JSON.parse(event.body);
     const now = new Date();
 
-    const songItem = {
+    if (artist === '' || title === '') {
+        throw new createError.BadRequest(`You must provide artist and title fields`);
+    }
+
+    const item: Song = {
         id: uuid(),
         artist,
         title,
@@ -21,18 +26,17 @@ export const createHandler: Handler = async (
     try {
         await dynamoDB.put({
             TableName: process.env.SONGS_TABLE_NAME,
-            Item: songItem,
+            Item: item,
         }).promise();
     } catch(err) {
         console.error(err);
+        throw new createError.InternalServerError(err);
     }
 
-    const resp = {
-        statusCode: 201,
-        body: JSON.stringify(songItem),
-    };
-
     return new Promise((resolve) => {
-        resolve(resp);
+        resolve({
+            statusCode: 201,
+            body: JSON.stringify(item),
+        });
     })
 };
