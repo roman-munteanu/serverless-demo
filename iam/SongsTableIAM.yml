@@ -1,0 +1,14 @@
+SongsTableIAM:
+  Effect: 'Allow'
+  Action:
+    - 'dynamodb:PutItem'
+    - 'dynamodb:Query'
+    - 'dynamodb:Get*'
+    - 'dynamodb:Scan*'
+    - 'dynamodb:UpdateItem'
+    - 'dynamodb:DeleteItem'
+  # Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/SongsTable
+  Resource: 
+    - ${self:custom.SongsTable.arn}
+    # - ${self:custom.SongsTable.arn}/index/artistReleaseDateIndex
+    - !Join ['/', ['${self:custom.SongsTable.arn}', 'index', 'artistReleaseDateIndex']] # allows to invoke the function manually and also when we deploy it

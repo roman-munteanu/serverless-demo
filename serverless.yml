@@ -3,6 +3,7 @@ frameworkVersion: "3"
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-pseudo-parameters
 
 provider:
   name: aws
@@ -10,6 +11,16 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-central-1
+  iam:
+    role:
+      statements:
+        - ${file(./iam/SongsTableIAM.yml):SongsTableIAM}
+  environment:
+    SONGS_TABLE_NAME: ${self:custom.SongsTable.name}
+
+resources:
+  Resources: 
+    SongsTable: ${file(./resources/SongsTable.yml):SongsTable}
 
 functions:
   hello:
@@ -18,4 +29,15 @@ functions:
       - http:
           path: /
           method: get
+  createSong:
+    handler: src/handlers.createHandler
+    events:
+      - httpApi:
+          path: /songs
+          method: post
 
+custom:
+  SongsTable:
+    name: 
+      Ref: SongsTable
+    arn: !GetAtt SongsTable.Arn

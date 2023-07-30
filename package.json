@@ -3,7 +3,12 @@
   "description": "",
   "version": "0.1.0",
   "author": "Roman Munteanu",
-  "dependencies": {},
+  "dependencies": {
+    "@aws-sdk/types": "^3.378.0",
+    "aws-sdk": "^2.1425.0",
+    "serverless-pseudo-parameters": "^2.6.1",
+    "uuid": "^9.0.0"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
     "serverless": "^3.33.0",

@@ -1,0 +1,24 @@
+SongsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: SongsTable-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      - AttributeName: artist
+        AttributeType: S
+      - AttributeName: releaseDate
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: artistReleaseDateIndex
+        KeySchema:
+          - AttributeName: artist
+            KeyType: HASH
+          - AttributeName: releaseDate
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
