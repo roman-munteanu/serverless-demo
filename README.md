@@ -25,3 +25,8 @@ Deploy just the function:
 ```
 sls deploy -f createSong --verbose
 ```
+
+Delete the stack:
+```
+sls remove
+```

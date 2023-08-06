@@ -1,0 +1,26 @@
+SongsBucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: ${self:custom.SongsBucket.name}
+    LifecycleConfiguration:
+      Rules:
+        - Id: ExpireSongImages
+          Status: Enabled
+          ExpirationInDays: 1
+    PublicAccessBlockConfiguration:
+      BlockPublicPolicy: false
+      RestrictPublicBuckets: false
+
+SongsBucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: 
+      Ref: SongsBucket
+    PolicyDocument:
+      Statement:
+        - Sid: PublicRead
+          Effect: Allow
+          Principal: '*'
+          Action:
+            - s3:GetObject
+          Resource: arn:aws:s3:::${self:custom.SongsBucket.name}/*

@@ -15,12 +15,16 @@ provider:
     role:
       statements:
         - ${file(./iam/SongsTableIAM.yml):SongsTableIAM}
+        - ${file(./iam/SongsBucketIAM.yml):SongsBucketIAM}
   environment:
     SONGS_TABLE_NAME: ${self:custom.SongsTable.name}
+    SONGS_BUCKET_NAME: ${self:custom.SongsBucket.name}
 
 resources:
   Resources: 
     SongsTable: ${file(./resources/SongsTable.yml):SongsTable}
+    SongsBucket: ${file(./resources/SongsBucket.yml):SongsBucket}
+    SongsBucketPolicy: ${file(./resources/SongsBucket.yml):SongsBucketPolicy}
 
 functions:
   createSong:
@@ -41,9 +45,18 @@ functions:
       - httpApi:
           path: /songs/{id}
           method: get
+  uploadReleaseImage:
+    handler: src/handlers/uploadReleaseImage.handler
+    events:
+      - httpApi:
+          path: /songs/{id}/image
+          method: patch
 
 custom:
   SongsTable:
     name: 
       Ref: SongsTable
     arn: !GetAtt SongsTable.Arn
+  SongsBucket:
+    name: songs-bucket-roman-${self:provider.stage}
+

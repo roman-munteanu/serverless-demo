@@ -4,10 +4,7 @@ import createError from 'http-errors';
 
 const dynamoDB = new DynamoDB.DocumentClient();
 
-export const handler: Handler = async (event: APIGatewayProxyEvent): 
-    Promise<APIGatewayProxyResult> => {
-
-    const {id} = event.pathParameters;
+export async function getItemByID(id: string): Promise<any> {
     let item: any;
 
     try {
@@ -25,6 +22,15 @@ export const handler: Handler = async (event: APIGatewayProxyEvent):
     if (!item) {
         throw new createError.NotFound(`Item with ID "${id}" not found`);
     }
+
+    return item;
+}
+
+export const handler: Handler = async (event: APIGatewayProxyEvent): 
+    Promise<APIGatewayProxyResult> => {
+
+    const {id} = event.pathParameters;
+    const item = await getItemByID(id);
 
     return new Promise((resolve) => {
         resolve({
